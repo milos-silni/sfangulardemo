@@ -1,95 +1,26 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8" />
-    <title>{% block title %}Angular JS Modules!{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet" />
+    <title>{% block title %}SF Angular Example!{% endblock %}</title>
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+        <link href="{{ asset('css/main.css') }}" rel="stylesheet" />
+    {% endblock %}
 </head>
 
 <body>
-<h2>Ekomi Sample Application</h2>
 
-<p><a href = "#addProduct">Add Product</a></p>
-<p><a href = "#listProducts">View Products</a></p>
+<div class="container">
 
-{% verbatim %}
-
-<div ng-app="mainApp">
-
-    <div ng-view></div>
-
-    <script type = "text/ng-template" id = "addProduct.htm">
+    {% block body %}{% endblock %}
     
-        <form ng-submit="product.add()">
-          <div class="form-group">
-            <label for="product_name">Name</label>
-            <input type="text" ng-model = "product.name"  class="form-control" id="product_name">
-          </div>
-          <div class="form-group">
-            <label for="product_price">price</label>
-            <input type="text" ng-model = "product.price"  class="form-control" id="product_price">
-          </div>
-          <div class="form-group">
-            <label for="product_description">price</label>
-            <input type="text" ng-model = "product.description"  class="form-control" id="product_description">
-          </div>
-          <button type="submit" class="btn btn-default">Save</button>
-        </form>
-    
-    </script>
-    
-    <script type = "text/ng-template" id = "listProducts.htm">
-    
-        <table>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>price</th>
-                <th>actions</th>
-            </tr>
-            <tr ng-repeat = "product in products">
-                <td ng-bind="product.id"></td>
-                <td ng-bind="product.name"></td>
-                <td ng-bind="product.price"></td>
-                <td><a href="#viewProduct/{{product.id}}">view</a></td>
-            </tr>
-        </table>
-        
-    </script>
-    
-    <script type = "text/ng-template" id = "viewProduct.htm">
-
-        <table border = "0">
-            <tr>
-                <td>name:</td>
-                <td>{{product.name}}</td>
-            </tr>
-    
-            <tr>
-                <td>price: </td>
-                <td>{{product.price}}</td>
-            </tr>
-    
-            <tr>
-                <td>description: </td>
-                <td>{{product.description}}</td>
-            </tr>
-        </table>
-    
-    </script>
-
 </div>
-
-{% endverbatim %}
 
 {% block javascripts %}
     <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
-    <script src="{{ asset('js/mainApp.js') }}"></script>
-    <script src="{{ asset('js/productController.js') }}"></script>
 {% endblock %}
 
 </body>

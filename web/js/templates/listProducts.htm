@@ -1,0 +1,15 @@
+
+<table class="table table-bordered">
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>price</th>
+        <th>actions</th>
+    </tr>
+    <tr ng-repeat = "product in products">
+        <td ng-bind="product.id"></td>
+        <td ng-bind="product.name"></td>
+        <td ng-bind="product.price"></td>
+        <td><a href="#viewProduct/{{product.id}}">view</a></td>
+    </tr>
+</table>

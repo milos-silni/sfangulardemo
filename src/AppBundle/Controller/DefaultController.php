@@ -70,12 +70,21 @@ class DefaultController extends Controller
             return new JsonResponse(['status' => 'OK']);
             
         } else {
-            $errors = [];
-            foreach ($form->getErrors(true) as $key => $error) {
-                $errors[] = $error->getMessage();
-            }
+            $serializer = $this->get('jms_serializer');
+            $errors = $serializer->serialize($form->getErrors(), 'json');
+            
+//            $errors = [];
+            
+            /*if (!empty($data['children'])) {
+                foreach ($data['children'] as $e) {
+                    $errors[]
+                }
+            }*/
+            
+            
+//            $errors = (string) $form->getErrors(true, false);
 
-            return new JsonResponse(['status' => 'error', 'errors' => $errors], 422);
+            return new JsonResponse(['status' => 'error', 'errors' => json_decode($errors)], 422);
         }
     }
 
@@ -91,4 +100,18 @@ class DefaultController extends Controller
         $json = $serializer->serialize($products, 'json');
         return new Response($json);
     }
+
+    /**
+     * @Route("/template/{template}", name="get_template")
+     * @Method({"GET"})
+     */
+    public function getTemplateAction($template)
+    {
+        if ($this->get('templating')->exists(sprintf("default/%s.twig", $template))) {
+            return $this->render(sprintf("default/%s.twig", $template));
+        } else {
+            return new JsonResponse(['message' => 'template not found'], 404);
+        }
+    }
+    
 }
