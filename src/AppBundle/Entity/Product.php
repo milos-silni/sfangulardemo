@@ -41,6 +41,11 @@ class Product
     protected $description;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    protected $image;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -117,5 +122,28 @@ class Product
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     * @return Product
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

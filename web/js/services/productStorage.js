@@ -15,7 +15,7 @@ angular.module('productApp').
             insertProduct: function(product, success, error) {
                 $http.post(
                     "/products",
-                    {'name': product.name, 'price': product.price, 'description': product.description}
+                    {'name': product.name, 'price': product.price, 'description': product.description, 'image': product.image}
                 ).success( function(response) {
                     success(response);
                 }).error(function(response) {

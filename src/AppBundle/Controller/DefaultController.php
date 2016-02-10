@@ -10,12 +10,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 use AppBundle\Entity\Product;
 
 
 class DefaultController extends Controller
 {
     /**
+     * @Security("has_role('ROLE_USER')")
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)
@@ -33,10 +38,12 @@ class DefaultController extends Controller
     public function productsAction(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Product');
-        $products = $repository->findAll();
+        $products = $repository->findBy([], [], 10);
+        $count = $repository->createQueryBuilder('n') ->select('count(n.id)')->getQuery()->getSingleScalarResult();
         $serializer = $this->get('serializer');
-        $json = $serializer->serialize($products, 'json');
-        return new Response($json);
+        $response = $serializer->serialize(['products' => $products, 'count' => $count], 'json');
+        
+        return new Response($response);
     }
 
     /**
@@ -53,6 +60,7 @@ class DefaultController extends Controller
             ->add('name')
             ->add('price')
             ->add('description')
+            ->add('image', FileType::class, array('required' => false))
             ->getForm();
         
         $form->submit($data);
@@ -62,6 +70,7 @@ class DefaultController extends Controller
             $product->setName($request->request->get('name'));
             $product->setPrice($request->request->get('price'));
             $product->setDescription($request->request->get('description'));
+            $product->setImage($request->request->get('image'));
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($product);
@@ -72,17 +81,6 @@ class DefaultController extends Controller
         } else {
             $serializer = $this->get('jms_serializer');
             $errors = $serializer->serialize($form->getErrors(), 'json');
-            
-//            $errors = [];
-            
-            /*if (!empty($data['children'])) {
-                foreach ($data['children'] as $e) {
-                    $errors[]
-                }
-            }*/
-            
-            
-//            $errors = (string) $form->getErrors(true, false);
 
             return new JsonResponse(['status' => 'error', 'errors' => json_decode($errors)], 422);
         }
@@ -112,6 +110,20 @@ class DefaultController extends Controller
         } else {
             return new JsonResponse(['message' => 'template not found'], 404);
         }
+    }
+
+    /**
+     * @Route("/upload", name="upload_image")
+     * @Method({"POST"})
+     */
+    public function uploadImageAction(Request $request)
+    {
+        $file = $request->files->get('file');
+        $imagesDir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/products';
+        $fileName = md5(uniqid()).'.'.$file->guessExtension();
+        $file->move($imagesDir, $fileName);
+        
+        return new JsonResponse(['status' => 'ok', 'image_url' => $fileName]);
     }
     
 }

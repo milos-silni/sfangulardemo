@@ -5,7 +5,8 @@
 angular.module('productApp').controller("listProductsController", function($scope, $http, productStorage) {
     productStorage.getProducts(
         function (data) {
-            $scope.products = data;
+            $scope.products = data.products;
+            $scope.total_products = data.count;
         }
     );
 });
@@ -17,6 +18,8 @@ angular.module('productApp').controller("addProductController", function($scope,
         description: '',
         image: ''
     };
+    $scope.image_uploading = false;
+    $scope.image_url = '';
 
     $scope.submit = function() {
 
@@ -32,7 +35,26 @@ angular.module('productApp').controller("addProductController", function($scope,
     };
 
     $scope.uploadFile = function(files) {
-        console.log( files ); 
+        var formData = new FormData();
+        
+        for (var i=0; i < files.length; i++) {
+            formData.append('file',  files[i]);
+        }
+
+        $scope.image_uploading = true;
+
+        $http.post('/upload', formData, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
+            })
+            .success( function(response){
+                $scope.product.image = response.image_url;
+                $scope.image_uploading = false;
+            })
+            .error( function(){
+                $scope.image_uploading = false;
+            });
     };
 });
 

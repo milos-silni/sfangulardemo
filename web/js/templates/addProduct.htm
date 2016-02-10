@@ -7,7 +7,7 @@
     
       <div class="form-group"" ng-class="{ 'has-error': productForm.product_name.$invalid && (productForm.$submitted || productForm.product_name.$touched) }">
         <label for="product_name">Name</label>
-        <input type="text" ng-model="product.name" name="product_name" class="form-control" required>
+        <input type="text" ng-model="product.name" name="product_name" class="form-control" id="product_name" required>
         <div ng-show="productForm.$submitted || productForm.product_name.$touched">
             <p class="help-block" ng-show="productForm.product_name.$error.required">The product name is required</p>
             <div ng-repeat="error in productForm.errors.form.children.name.errors" class="has-error">
@@ -18,7 +18,7 @@
       
       <div class="form-group" ng-class="{ 'has-error': productForm.product_price.$invalid && (productForm.$submitted || productForm.product_price.$touched) }">
         <label for="product_price">Price</label>
-        <input type="text" ng-model = "product.price"  class="form-control" name="product_price" required integer>
+        <input type="text" ng-model = "product.price"  class="form-control" name="product_price" id="product_price" required integer>
         <div ng-show="productForm.$submitted || productForm.product_price.$touched">
             <p class="help-block" ng-show="productForm.product_price.$error.required">Price is required</p>
             <p class="help-block" ng-show="productForm.product_price.$error.integer">Price must be integer</p>
@@ -30,7 +30,7 @@
       
       <div class="form-group" ng-class="{ 'has-error': productForm.product_description.$invalid && (productForm.$submitted || productForm.product_description.$touched) }">
         <label for="product_description">Description</label>
-        <input type="text" ng-model = "product.description"  class="form-control" name="product_description" required>
+        <input type="text" ng-model = "product.description"  class="form-control" name="product_description" id="product_description" required>
         <div ng-show="productForm.$submitted || productForm.product_description.$touched">
             <p class="help-block" ng-show="productForm.product_description.$error.required">The product decription is required</p>
             <div ng-repeat="error in productForm.errors.form.children.description.errors" class="has-error">
@@ -41,7 +41,14 @@
 
     <div class="form-group" ng-class="{ 'has-error': productForm.image.$invalid && (productForm.$submitted || productForm.image.$touched) }">
         <label for="image">Image</label>
-        <input type="file" ng-model = "product.image"  class="form-control" name="image" id="image" onchange="angular.element(this).scope().uploadFile(this.files)">
+       
+        <input type="file" ng-model = "product.image"  class="form-control" name="image" id="image" onchange="angular.element(this).scope().uploadFile(this.files)" accept="image/*">
+
+        <div class="row">
+            <img ng-src="/uploads/products/{{product.image}}" ng-if="product.image" class="img-responsive col-md-1"/>
+            <img src="/img/loading_spinner.gif" class="img-responsive col-md-1" ng-show="image_uploading"/>
+        </div>
+        
         <div ng-show="productForm.$submitted || productForm.image.$touched">
             <p class="help-block" ng-show="productForm.image.$error.required">Image is required</p>
         </div>

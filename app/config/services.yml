@@ -20,3 +20,6 @@ services:
     arguments:
       - [@serializer.method]
       - {json: @serializer.encoder.json }
+      
+  fos_user.doctrine_registry:
+        alias: doctrine
