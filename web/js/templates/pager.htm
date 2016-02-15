@@ -1,0 +1,17 @@
+<nav>
+    <ul class="pagination">
+        <li ng-class="{'disabled': currentPage <= 1}">
+            <a href="#listProducts/{{prev}}" aria-label="Previous" ng-disabled="has_prev">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li ng-repeat="n in range" ng-class="{'disabled': currentPage==n}">
+            <a href="#listProducts/{{n}}">{{n}}</a>
+        </li>
+        <li ng-class="{'disabled': currentPage >= number_pages}">
+            <a href="#listProducts/{{next}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

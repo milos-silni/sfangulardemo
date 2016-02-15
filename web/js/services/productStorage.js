@@ -5,11 +5,11 @@
 angular.module('productApp').
     factory('productStorage', function($http) {
         return {
-            getProducts: function(callback) {
-                $http.get("/products")
-                    .success( function(response) {
-                        callback(response);
-                    });
+            getProducts: function(page, callback) {
+                $http.get("/products/" + page)
+                .success( function(response) {
+                    callback(response);
+                });
             },
             
             insertProduct: function(product, success, error) {

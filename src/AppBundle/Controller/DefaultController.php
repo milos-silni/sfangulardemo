@@ -32,13 +32,20 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/products", name="products")
+     * @Route("/products/{page}", name="products", defaults={"page" = 0})
      * @Method({"GET"})
      */
-    public function productsAction(Request $request)
+    public function productsAction($page)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Product');
-        $products = $repository->findBy([], [], 10);
+        
+        if ($page > 0) {
+            $offset = $page - 1;
+        } else {
+            $offset = 0;
+        }
+        
+        $products = $repository->findBy([], [], 10, $offset * 10);
         $count = $repository->createQueryBuilder('n') ->select('count(n.id)')->getQuery()->getSingleScalarResult();
         $serializer = $this->get('serializer');
         $response = $serializer->serialize(['products' => $products, 'count' => $count], 'json');

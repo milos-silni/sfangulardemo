@@ -11,8 +11,8 @@ angular.module("productApp", ['ngRoute'])
             templateUrl: '/js/templates/addProduct.htm',
             controller: 'addProductController'
         }).
-    
-        when('/listProducts', {
+
+        when('/listProducts/:page?', {
             templateUrl: '/js/templates/listProducts.htm',
             controller: 'listProductsController'
         }).

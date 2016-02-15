@@ -2,8 +2,12 @@
  * Created by milos on 2/4/16.
  */
 
-angular.module('productApp').controller("listProductsController", function($scope, $http, productStorage) {
+angular.module('productApp').controller("listProductsController", function($scope, $http, productStorage, $routeParams) {
+    $scope.total_products = 0;
+    $scope.current_page = angular.isUndefined($routeParams.page) ? 1 : $routeParams.page;
+    
     productStorage.getProducts(
+        angular.isUndefined($routeParams.page) ? 0 : $routeParams.page, 
         function (data) {
             $scope.products = data.products;
             $scope.total_products = data.count;
